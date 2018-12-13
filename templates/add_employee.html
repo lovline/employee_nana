@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/commons.css">
+    <style>
+        label{
+            width:80px;
+            text-align: right;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <form action="/cmdb/login/" method="post">
+        <p>
+            <label for="username">username: </label>
+            <input id="username" name="username" type="text"  placeholder="username"/>
+        </p>
+        <p>
+            <label for="password">password: </label>
+            <input id="password" name="password" type="password"  placeholder="password"/>
+        </p>
+        <p>
+            <label for="gender">gender: </label>
+            Male: <input type="radio" name="gender" value="1">
+            FeMale: <input type="radio" name="gender" value="2">
+            hehe: <input type="radio" name="gender" value="3">
+        </p>
+        <p>
+            <label for="interests">interests: </label>
+            reading: <input type="checkbox" name="favor" value="1">
+            sleeping: <input type="checkbox" name="favor" value="2">
+            coding: <input type="checkbox" name="favor" value="3">
+        </p>
+        <p>
+            <label for="city">city: </label>
+            <select name="city">
+                <option value="xa">xian</option>
+                <option value="sh">shanghai</option>
+                <option value="bj">bj</option>
+            </select>
+        </p>
+        <!--
+        <p>
+           <label for="file">file: </label>
+            <input type="file" name="file">
+        </p>
+        -->
+        <p>
+            <span>confirm submit:</span>
+            <input type="submit" value="submit">
+            <span style="color: red">{{ error_msg }}</span>
+        </p>
+    </form>
+</body>
+</html>
