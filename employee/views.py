@@ -33,3 +33,7 @@ def add_manager(request):
 
 def index(request):
     return render(request, 'index.html')
+
+
+def add_employee(request):
+    return render(request, 'add_employee.html')

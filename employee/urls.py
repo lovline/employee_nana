@@ -16,7 +16,8 @@ from django.conf.urls import include, url
 from employee import views
 
 urlpatterns = [
-    url(r'^login/', views.login),
     url(r'^add_manager/', views.add_manager),
-    url(r'^index', views.index)
+    url(r'^add_employee/', views.add_employee),
+    url(r'^login/', views.login),
+    url(r'^index', views.index),
 ]
