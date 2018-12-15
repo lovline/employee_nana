@@ -12,3 +12,8 @@ user Django to achieve employee manager system.
 # update time : 2018-12-14 13:23
 # update place : HW company
 # device : HW Cloud
+
+# third
+# update time : 2018-12-15 21:50
+# update place : HP laptop
+# device : Home
