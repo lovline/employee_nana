@@ -8,11 +8,13 @@ class UserInfo(models.Model):
 
 
 class EmployeeInfo(models.Model):
-    name = models.CharField(max_length=32)
+    username = models.CharField(max_length=32)
+    password = models.CharField(max_length=32)
     age = models.IntegerField()
     gender = models.CharField(max_length=16)
     phone_number = models.CharField(max_length=16)
     email = models.EmailField(max_length=64)
+    interests = models.CharField(max_length=64)
     address = models.CharField(max_length=64)
     school = models.CharField(max_length=64)
     department = models.CharField(max_length=64)
