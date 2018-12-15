@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager</title>
+    <link rel="stylesheet" href="/static/commons.css">
+    <style>
+        label{
+            width:80px;
+            text-align: right;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h3> Manager Employee information </h3>
+    <form action="/employee/manager_employee/" method="post">
+        <p>
+            <a target="_parent" href="/employee/add_employee"><h5>&nbsp;&nbsp;add employee to NN company</h5></a>
+        </p>
+        <p>
+            <label><h4>current employees of NN company</h4></label>
+            <ul>
+                <h5><span style="color: green">{{ manager_msg }}</span></h5>
+            </ul>
+            {% for row in employee_info %}
+                <ul>
+                    <li><a target="_parent" href="/employee/detail_{{ row.id }}">{{ row.username }}</a>&nbsp;
+                        {{ row.department }}&nbsp;&nbsp;&nbsp;<a target="_parent" href="/employee/update_{{ row.id }}">update</a></li>
+                </ul>
+            {% endfor %}
+        </p>
+
+    </form>
+</body>
+</html>
