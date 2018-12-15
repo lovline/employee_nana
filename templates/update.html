@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update</title>
+</head>
+<body>
+    <h1>Employee {{ employee_info.username }}'s Detail Information</h1>
+    <a target="_parent" href="/employee/manager_employee"><h4>return manager page</h4></a>
+    <h3>update {{ employee_info.username }}</h3>
+    <h4>phone_number&nbsp;=&nbsp; {{ employee_info.phone_number }}</h4>
+    <h4>email&nbsp;=&nbsp; {{ employee_info.email }}</h4>
+    <h4>address&nbsp;=&nbsp; {{ employee_info.address }}</h4>
+    <h4>department&nbsp;=&nbsp; {{ employee_info.department }}</h4>
+    <form action="/employee/update_{{ employee_info.id }}/" method="post">
+        <p>
+            <label for="phone_number">number: </label>&nbsp;&nbsp;
+            <input id="phone_number" name="phone_number" type="text" value="{{ employee_info.phone_number }}"/>
+        </p>
+        <p>
+            <label for="email">email: </label>&nbsp;&nbsp;
+            <input id="email" name="email" type="text"  value="{{ employee_info.email }}"/>
+        </p>
+        <p>
+            <label for="address">address: </label>&nbsp;&nbsp;
+            <input id="address" name="address" type="text" value="{{ employee_info.address }}" />
+        </p>
+        <p>
+            <label for="department">department: </label>&nbsp;&nbsp;
+            <select name="department" >
+                <option value="Cloud Core">Cloud Core</option>
+                <option value="2012 laboratory">2012 laboratory</option>
+                <option value="Terminal">Terminal</option>
+                <option value="NotNNComany">NotNNComany</option>
+            </select>
+        </p>
+        <p>
+            <span>confirm update:</span>&nbsp;&nbsp;
+            <input type="submit" value="update">
+        </p>
+    </form>
+</body>
+</html>

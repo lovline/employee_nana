@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Add Employee</title>
     <link rel="stylesheet" href="/static/commons.css">
     <style>
         label{
@@ -13,45 +13,61 @@
     </style>
 </head>
 <body>
-    <form action="/cmdb/login/" method="post">
+    <h2>please input or select following options to add employee to NN company</h2>
+    <form action="/employee/add_employee/" method="post">
         <p>
-            <label for="username">username: </label>
-            <input id="username" name="username" type="text"  placeholder="username"/>
+            <label for="username">username: </label>&nbsp;&nbsp;
+            <input id="username" name="username" type="text"  placeholder="Brush Lee"/>
         </p>
         <p>
-            <label for="password">password: </label>
-            <input id="password" name="password" type="password"  placeholder="password"/>
+            <label for="password">password: </label>&nbsp;&nbsp;
+            <input id="password" name="password" type="password"  placeholder="***"/>
         </p>
         <p>
-            <label for="gender">gender: </label>
-            Male: <input type="radio" name="gender" value="1">
-            FeMale: <input type="radio" name="gender" value="2">
-            hehe: <input type="radio" name="gender" value="3">
+            <label for="age">age: </label>&nbsp;&nbsp;
+            <input id="age" name="age" type="text"  placeholder="27"/>
         </p>
         <p>
-            <label for="interests">interests: </label>
-            reading: <input type="checkbox" name="favor" value="1">
-            sleeping: <input type="checkbox" name="favor" value="2">
-            coding: <input type="checkbox" name="favor" value="3">
+            <label for="gender">gender: </label>&nbsp;&nbsp;
+            Male: <input type="radio" name="gender" value="1">&nbsp;
+            FeMale: <input type="radio" name="gender" value="2">&nbsp;
+            two-in-one: <input type="radio" name="gender" value="3">
         </p>
         <p>
-            <label for="city">city: </label>
-            <select name="city">
-                <option value="xa">xian</option>
-                <option value="sh">shanghai</option>
-                <option value="bj">bj</option>
+            <label for="phone_number">number: </label>&nbsp;&nbsp;
+            <input id="phone_number" name="phone_number" type="text"  placeholder="137******68"/>
+        </p>
+        <p>
+            <label for="email">email: </label>&nbsp;&nbsp;
+            <input id="email" name="email" type="text"  placeholder="lovline@huawei.com"/>
+        </p>
+        <p>
+            <label for="interests">interests: </label>&nbsp;&nbsp;
+            coding: <input type="checkbox" name="interests" value="1">&nbsp;
+            reading: <input type="checkbox" name="interests" value="2">&nbsp;
+            sleeping: <input type="checkbox" name="interests" value="3">&nbsp;
+        </p>
+        <p>
+            <label for="address">address: </label>&nbsp;&nbsp;
+            <input id="address" name="address" type="text"  placeholder="Xian"/>
+        </p>
+        <p>
+            <label for="school">school: </label>&nbsp;&nbsp;
+            <input id="school" name="school" type="text"  placeholder="XiDian"/>
+        </p>
+        <p>
+            <label for="department">department: </label>&nbsp;&nbsp;
+            <select name="department">
+                <option value="Cloud Core">Cloud Core</option>
+                <option value="2012 laboratory">2012 laboratory</option>
+                <option value="Terminal">Terminal</option>
+                <option value="NotNNComany">NotNNComany</option>
             </select>
         </p>
-        <!--
         <p>
-           <label for="file">file: </label>
-            <input type="file" name="file">
-        </p>
-        -->
-        <p>
-            <span>confirm submit:</span>
-            <input type="submit" value="submit">
-            <span style="color: red">{{ error_msg }}</span>
+            <span>confirm add:</span>&nbsp;&nbsp;
+            <input type="submit" value="add">
+            <a target="_parent" href="/employee/manager_employee"><h4>Cancel</h4></a>
         </p>
     </form>
 </body>

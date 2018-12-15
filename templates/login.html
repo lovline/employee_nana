@@ -12,21 +12,21 @@
         }
     </style>
 </head>
-<body>
+<body background="/images/login.jpg">
     <h2>welcome to login !</h2>
     <h5><span style="color: red">{{ error_msg }}</span></h5>
     <form action="/employee/login/" method="post">
         <p>
-            <label for="username">username: </label>
+            <label for="username">username: </label>&nbsp;&nbsp;
             <input id="username" name="username" type="text" />
         </p>
         <p>
-            <label for="password">password: </label>
+            <label for="password">password: </label>&nbsp;&nbsp;
             <input id="password" name="password" type="password" />
         </p>
         <p>
-            <span>confirm login: </span>
-            <input type="submit" value="submit" style="color: darkgreen; width: 60px; height: 25px;" >
+            <span>confirm login: </span>&nbsp;&nbsp;
+            <input type="submit" value="sign in" style="color: darkgreen; width: 60px; height: 25px;" >
         </p>
     </form>
 </body>
