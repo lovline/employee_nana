@@ -27,6 +27,13 @@ def login(request):
         return redirect('/employee/index/')
 
 
+def logout(request):
+    global is_admin_login
+    is_admin_login = False
+    error_msg = 'you have logout succeed'
+    return render(request, 'login.html', {'error_msg': error_msg})
+
+
 def index(request):
     global is_admin_login
     if is_admin_login is False:
@@ -121,8 +128,18 @@ def update_employee(request, uid):
         return render(request, 'update.html', {'employee_info': employee_info})
 
 
-def delete_employee(request):
-    pass
+def delete_employee(request, uid):
+    employee_del = models.EmployeeInfo.objects.filter(id=uid).first()
+    del_name = employee_del.username
+    if 'GET' == request.method:
+        return render(request, 'delete.html', {'employee_del': employee_del})
+    elif 'POST' == request.method:
+        models.EmployeeInfo.objects.filter(id=uid).delete()
+        manager_msg = 'delete %s succeed' % del_name
+        employee_info = models.EmployeeInfo.objects.all()
+        return render(request, 'manager.html', {'employee_info': employee_info, 'manager_msg': manager_msg})
+    else:
+        return render(request, 'delete.html', {'employee_info': employee_del})
 
 
 def one_detail_info(request, uid):
@@ -135,7 +152,13 @@ def note(request):
 
 
 def bank_service(request):
-    pass
+    if 'GET' == request.method:
+        return render(request, 'bank_service.html')
+    elif 'POST' == request.method:
+
+        return redirect('/employee/bank_service/')
+    else:
+        return redirect('/employee/bank_service/')
 
 
 def shop_store(request):
