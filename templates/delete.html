@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete</title>
+</head>
+<body>
+    <h1>Employee {{ employee_del.username }}'s Detail Information</h1>
+    <a target="_parent" href="/employee/manager_employee"><h4>Cancel Delete Action</h4></a>
+    <h3>delete {{ employee_del.username }}</h3>
+    <h4>phone_number&nbsp;=&nbsp; {{ employee_del.phone_number }}</h4>
+    <h4>email&nbsp;=&nbsp; {{ employee_del.email }}</h4>
+    <h4>interests&nbsp;=&nbsp; {{ employee_del.interests }}</h4>
+    <h4>address&nbsp;=&nbsp; {{ employee_del.address }}</h4>
+    <h4>school&nbsp;=&nbsp; {{ employee_del.school }}</h4>
+    <h4>department&nbsp;=&nbsp; {{ employee_del.department }}</h4>
+    <h4>employment_date&nbsp;=&nbsp; {{ employee_del.employment_date }}</h4>
+    <form action="/employee/delete_{{ employee_del.id }}/" method="post">
+       <p>
+            you're going to :
+       </p>
+        <p>
+            <h3><span>confirm delete:</span>&nbsp;&nbsp;
+            <input type="submit" value="delete"></h3>
+        </p>
+    </form>
+</body>
+</html>

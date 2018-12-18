@@ -13,24 +13,34 @@
     </style>
 </head>
 <body>
-    <h3> Manager Employee information </h3>
+    <h3> Manager Employee Information </h3>
+    <p>
+        ---------------------------------------------
+    </p>
     <form action="/employee/manager_employee/" method="post">
         <p>
             <a target="_parent" href="/employee/add_employee"><h5>&nbsp;&nbsp;add employee to NN company</h5></a>
         </p>
         <p>
-            <label><h4>current employees of NN company</h4></label>
+            <label><h4>Current Employees of NN Company</h4></label>
             <ul>
                 <h5><span style="color: green">{{ manager_msg }}</span></h5>
             </ul>
             {% for row in employee_info %}
                 <ul>
                     <li><a target="_parent" href="/employee/detail_{{ row.id }}">{{ row.username }}</a>&nbsp;
-                        {{ row.department }}&nbsp;&nbsp;&nbsp;<a target="_parent" href="/employee/update_{{ row.id }}">update</a></li>
+                        {{ row.department }}&nbsp;&nbsp;&nbsp;<a target="_parent" href="/employee/update_{{ row.id }}">
+                            update</a>&nbsp;&nbsp;&nbsp;<a target="_parent" href="/employee/delete_{{ row.id }}">
+                            delete</a></li>
                 </ul>
             {% endfor %}
         </p>
-
+        <p>
+            --------------------------------------------------
+        </p>
+        <p>
+            <a target="_parent" href="/employee/index"><h4>---->>home page</h4></a>
+        </p>
     </form>
 </body>
 </html>

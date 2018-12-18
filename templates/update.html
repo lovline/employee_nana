@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Employee {{ employee_info.username }}'s Detail Information</h1>
-    <a target="_parent" href="/employee/manager_employee"><h4>return manager page</h4></a>
+    <a target="_parent" href="/employee/manager_employee"><h4>Cancel Update Action</h4></a>
     <h3>update {{ employee_info.username }}</h3>
     <h4>phone_number&nbsp;=&nbsp; {{ employee_info.phone_number }}</h4>
     <h4>email&nbsp;=&nbsp; {{ employee_info.email }}</h4>
@@ -35,8 +35,8 @@
             </select>
         </p>
         <p>
-            <span>confirm update:</span>&nbsp;&nbsp;
-            <input type="submit" value="update">
+            <h3><span>confirm update:</span>&nbsp;&nbsp;
+            <input type="submit" value="update"></h3>
         </p>
     </form>
 </body>
