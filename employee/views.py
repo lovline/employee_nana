@@ -1,7 +1,37 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, schedule
 from employee import models
 # Create your views here.
 is_admin_login = False
+person_bank_id = 0
+salary_reflection = {
+    13: 14000,
+    14: 16000,
+    15: 18000,
+    16: 230000
+}
+
+
+def check_login_func(request, admin_flag, *html_page):
+    global is_admin_login, person_bank_id
+    # get input username and password
+    login_name = request.POST.get('username', None)
+    login_pwd = request.POST.get('password', None)
+    if login_name is None:
+        error_msg = 'username can not be empty.'
+        return render(request, html_page[0], {'error_msg': error_msg})
+    # get employee_info obj
+    manager_info = models.UserInfo.objects.filter(username=login_name, password=login_pwd).first()
+    if manager_info:
+        if admin_flag:
+            # admin login #
+            is_admin_login = True
+        else:
+            # personal bank login #
+            person_bank_id = manager_info.id
+            return redirect(html_page[1])
+    else:
+        error_msg = 'username or password is incorrect.'
+        return render(request, html_page[0], {'error_msg': error_msg})
 
 
 def login(request):
@@ -9,20 +39,7 @@ def login(request):
     if 'GET' == request.method:
         return render(request, 'login.html')
     elif 'POST' == request.method:
-        # get input username and password
-        login_name = request.POST.get('username', None)
-        login_pwd = request.POST.get('password', None)
-        if login_name is None:
-            error_msg = 'username can not be empty.'
-            return render(request, 'login.html', {'error_msg': error_msg})
-        # get admin_info obj
-        manager_info = models.UserInfo.objects.filter(username=login_name, password=login_pwd).first()
-        if manager_info:
-            is_admin_login = True
-            return redirect('/employee/index/')
-        else:
-            error_msg = 'username or password is incorrect.'
-            return render(request, 'login.html', {'error_msg': error_msg})
+        check_login_func(request, True, ['login.html', '/employee/index/'])
     else:
         return redirect('/employee/index/')
 
@@ -151,14 +168,80 @@ def note(request):
     pass
 
 
-def bank_service(request):
-    if 'GET' == request.method:
-        return render(request, 'bank_service.html')
-    elif 'POST' == request.method:
-
-        return redirect('/employee/bank_service/')
+def person_bank_transation_func(request, employee, transaction_type):
+    if employee:
+        curr_deposit = employee.deposit
+        if 1 == transaction_type:
+            # deposit money #
+            taken_money = request.POST.get('taken', None)
+            if taken_money is None:
+                taken_money = 0
+            else:
+                taken_money = int(taken_money)
+            if taken_money >= curr_deposit:
+                error_msg = 'sorry you dont have enough money to take'
+            else:
+                up_deposit = curr_deposit - taken_money
+                models.EmployeeInfo.objects.filter(id=person_bank_id).update(deposit=up_deposit)
+                error_msg = 'you have taken %d money from your bank account' % taken_money
+            return render(request, 'personal_bank_service.html', {'error_msg': error_msg})
+        elif 2 == transaction_type:
+            # draw money #
+            save_money = request.POST.get('save', None)
+            if save_money is None:
+                save_money = 0
+            else:
+                save_money = int(save_money)
+            up_deposit = curr_deposit + save_money
+            models.EmployeeInfo.objects.filter(id=person_bank_id).update(deposit=up_deposit)
+            error_msg = 'you have save %d money from your bank account' % save_money
+            return render(request, 'personal_bank_service.html', {'error_msg': error_msg})
+        elif 3 == transaction_type:
+            # transfer money #
+            transfer_money = request.POST.get('transfer', None)
+            if transfer_money is None:
+                transfer_money = 0
+            else:
+                transfer_money = int(transfer_money)
+            to_person_id = request.POST.get('to_person_id', None)
+            to_person_obj = models.EmployeeInfo.objects.filter(id=to_person_id).first()
+            if transfer_money >= curr_deposit:
+                error_msg = 'sorry you dont have enough money to take'
+            else:
+                up_deposit = curr_deposit - transfer_money
+                models.EmployeeInfo.objects.filter(id=person_bank_id).update(deposit=up_deposit)
+                to_person_deposit = to_person_obj.deposit + transfer_money
+                models.EmployeeInfo.objects.filter(id=to_person_id).update(deposit=to_person_deposit)
+                error_msg = 'you have transfered %d money to %s from your bank account' % (
+                        transfer_money, to_person_obj.username)
+            return render(request, 'personal_bank_service.html', {'error_msg': error_msg})
+        else:
+            pass
     else:
-        return redirect('/employee/bank_service/')
+        return render(request, 'personal_bank_service.html')
+
+
+def personal_bank_service(request):
+    global person_bank_id
+    if 'GET' == request.method:
+        return render(request, 'personal_bank_service.html')
+    elif 'POST' == request.method:
+        employee = models.EmployeeInfo.objects.filter(id=person_bank_id).first()
+        transaction_type = request.POST.get('transaction', None)
+        if transaction_type is None:
+            transaction_type = 0
+        person_bank_transation_func(request, employee, transaction_type)
+    else:
+        return redirect('/employee/personal_bank_service/')
+
+
+def bank_service_login(request):
+    if 'GET' == request.method:
+        return render(request, 'bank_service_login.html')
+    elif 'POST' == request.method:
+        check_login_func(request, False, ['bank_service_login.html', '/employee/personal_bank_login/'])
+    else:
+        return redirect('/employee/bank_service_login/')
 
 
 def shop_store(request):
@@ -176,3 +259,23 @@ def add_manager(request):
     return HttpResponse('<h1>add manager ok.</h1>')
 
 
+def payment_remuneration_timed_task():
+    global is_admin_login, salary_reflection
+    if is_admin_login:
+        employee_objs = models.EmployeeInfo.objects.all()
+        for employee in employee_objs:
+            curr_emp_id = employee.id
+            curr_emp_salary = employee.deposit
+            salary_increase = salary_reflection[employee.level]
+            if salary_increase is None:
+                salary_increase = 0
+            money = curr_emp_salary + salary_increase
+            models.EmployeeInfo.objects.filter(id=curr_emp_id).update(deposit=money)
+
+
+if __name__ == '__main__':
+    # payment_remuneration_timed_task of 10 minutes#
+    schedule.every(10).minutes.do(payment_remuneration_timed_task)
+    while True:
+        schedule.run_pending()
+ 
