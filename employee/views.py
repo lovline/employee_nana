@@ -1,5 +1,7 @@
-from django.shortcuts import render, redirect, HttpResponse, schedule
+from django.shortcuts import render, redirect, HttpResponse
+import schedule
 from employee import models
+
 # Create your views here.
 is_admin_login = False
 person_bank_id = 0
@@ -18,9 +20,12 @@ def check_login_func(request, admin_flag, *html_page):
     login_pwd = request.POST.get('password', None)
     if login_name is None:
         error_msg = 'username can not be empty.'
-        return render(request, html_page[0], {'error_msg': error_msg})
+        return render(request, html_page[0][0], {'error_msg': error_msg})
     # get employee_info obj
-    manager_info = models.UserInfo.objects.filter(username=login_name, password=login_pwd).first()
+    if admin_flag:
+        manager_info = models.UserInfo.objects.filter(username=login_name, password=login_pwd).first()
+    else:
+        manager_info = models.EmployeeInfo.objects.filter(username=login_name, password=login_pwd).first()
     if manager_info:
         if admin_flag:
             # admin login #
@@ -28,10 +33,11 @@ def check_login_func(request, admin_flag, *html_page):
         else:
             # personal bank login #
             person_bank_id = manager_info.id
-            return redirect(html_page[1])
+        return redirect(html_page[0][1])
     else:
         error_msg = 'username or password is incorrect.'
-        return render(request, html_page[0], {'error_msg': error_msg})
+        print type(html_page[0][0]), html_page[0][0]
+        return render(request, html_page[0][0], {'error_msg': error_msg})
 
 
 def login(request):
@@ -39,7 +45,8 @@ def login(request):
     if 'GET' == request.method:
         return render(request, 'login.html')
     elif 'POST' == request.method:
-        check_login_func(request, True, ['login.html', '/employee/index/'])
+        result = check_login_func(request, True, ['login.html', '/employee/index/'])
+        return result
     else:
         return redirect('/employee/index/')
 
@@ -114,11 +121,11 @@ def add_employee(request):
         return render(request, 'add_employee.html', {'employee_info': employee_info})
 
 
-def employee_login(request):
+def employee_login(request, uid):
     pass
 
 
-def employee_logout(request):
+def employee_logout(request, uid):
     pass
 
 
@@ -168,7 +175,7 @@ def note(request):
     pass
 
 
-def person_bank_transation_func(request, employee, transaction_type):
+def person_bank_transaction_func(request, employee, transaction_type):
     if employee:
         curr_deposit = employee.deposit
         if 1 == transaction_type:
@@ -213,7 +220,7 @@ def person_bank_transation_func(request, employee, transaction_type):
                 to_person_deposit = to_person_obj.deposit + transfer_money
                 models.EmployeeInfo.objects.filter(id=to_person_id).update(deposit=to_person_deposit)
                 error_msg = 'you have transfered %d money to %s from your bank account' % (
-                        transfer_money, to_person_obj.username)
+                    transfer_money, to_person_obj.username)
             return render(request, 'personal_bank_service.html', {'error_msg': error_msg})
         else:
             pass
@@ -230,7 +237,7 @@ def personal_bank_service(request):
         transaction_type = request.POST.get('transaction', None)
         if transaction_type is None:
             transaction_type = 0
-        person_bank_transation_func(request, employee, transaction_type)
+        person_bank_transaction_func(request, employee, transaction_type)
     else:
         return redirect('/employee/personal_bank_service/')
 
@@ -239,7 +246,8 @@ def bank_service_login(request):
     if 'GET' == request.method:
         return render(request, 'bank_service_login.html')
     elif 'POST' == request.method:
-        check_login_func(request, False, ['bank_service_login.html', '/employee/personal_bank_login/'])
+        result = check_login_func(request, False, ['bank_service_login.html', '/employee/personal_bank_service/'])
+        return result
     else:
         return redirect('/employee/bank_service_login/')
 
@@ -278,4 +286,4 @@ if __name__ == '__main__':
     schedule.every(10).minutes.do(payment_remuneration_timed_task)
     while True:
         schedule.run_pending()
- 
+

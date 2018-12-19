@@ -18,4 +18,6 @@ class EmployeeInfo(models.Model):
     address = models.CharField(max_length=64)
     school = models.CharField(max_length=64)
     department = models.CharField(max_length=64)
+    level = models.IntegerField()
+    deposit = models.IntegerField()
     employment_date = models.DateTimeField(max_length=64, auto_now_add=True)
