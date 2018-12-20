@@ -13,9 +13,54 @@
     </style>
 </head>
 <body>
-    <h2>please input or select following options to add employee to NN company</h2>
+    <h2>please input or select following options to transact</h2>
     <form action="/employee/personal_bank_service/" method="post">
-        <h2>hahahah</h2>
+        <p>
+            <label for="transaction_type">Transaction Type: </label>&nbsp;&nbsp;
+            <select name="transaction_type">
+                <option value="1">Taken Money</option>
+                <option value="2">Save Money</option>
+                <option value="3">Transfer Money</option>
+            </select>
+        </p>
+        <p>
+            ***************************************
+        </p>
+        <p>
+            <label for="taken">Taken Money: </label>&nbsp;&nbsp;
+            <input id="taken" name="taken" type="text"  placeholder="500"/>
+        </p>
+        <p>
+            ***************************************
+        </p>
+        <p>
+            ***************************************
+        </p>
+        <p>
+            <label for="save">Save Money: </label>&nbsp;&nbsp;
+            <input id="save" name="save" type="text"  placeholder="800"/>
+        </p>
+        <p>
+            ***************************************
+        </p>
+        <p>
+            ***************************************
+        </p>
+        <p>
+            <label for="to_person">Transfer Person: </label>&nbsp;&nbsp;
+            <select name="to_person">
+                {% for row in employee_info %}
+                    <option value="{{ employee_info.id }}">{{ employee_info.username }}</option>
+                {% endfor %}
+            </select>
+            <label for="transfer">Transfer Money: </label>&nbsp;&nbsp;
+            <input id="transfer" name="transfer" type="text"  placeholder="1000"/>
+        </p>
+        <p>
+            <span>confirm operation:</span>&nbsp;&nbsp;
+            <input type="submit" value="operation">
+            <a target="_parent" href="/employee/personal_bank_service"><h4>Cancel</h4></a>
+        </p> 
     </form>
 </body>
 </html>
