@@ -184,6 +184,7 @@ def note(request):
 
 
 def person_bank_transaction_func(request, employee, transaction_type):
+    employee_info = models.EmployeeInfo.objects.all()
     if employee:
         curr_deposit = employee.deposit
         if 1 == transaction_type:
@@ -199,7 +200,7 @@ def person_bank_transaction_func(request, employee, transaction_type):
                 up_deposit = curr_deposit - taken_money
                 models.EmployeeInfo.objects.filter(id=person_bank_id).update(deposit=up_deposit)
                 error_msg = 'you have taken %d money from your bank account' % taken_money
-            return render(request, 'personal_bank_service.html', {'error_msg': error_msg})
+            return render(request, 'personal_bank_service.html', {'error_msg': error_msg, 'employee_info': employee_info})
         elif 2 == transaction_type:
             # draw money #
             save_money = request.POST.get('save', None)
@@ -210,7 +211,7 @@ def person_bank_transaction_func(request, employee, transaction_type):
             up_deposit = curr_deposit + save_money
             models.EmployeeInfo.objects.filter(id=person_bank_id).update(deposit=up_deposit)
             error_msg = 'you have save %d money from your bank account' % save_money
-            return render(request, 'personal_bank_service.html', {'error_msg': error_msg})
+            return render(request, 'personal_bank_service.html', {'error_msg': error_msg, 'employee_info': employee_info})
         elif 3 == transaction_type:
             # transfer money #
             transfer_money = request.POST.get('transfer', None)
@@ -229,7 +230,7 @@ def person_bank_transaction_func(request, employee, transaction_type):
                 models.EmployeeInfo.objects.filter(id=to_person_id).update(deposit=to_person_deposit)
                 error_msg = 'you have transfered %d money to %s from your bank account' % (
                     transfer_money, to_person_obj.username)
-            return render(request, 'personal_bank_service.html', {'error_msg': error_msg})
+            return render(request, 'personal_bank_service.html', {'error_msg': error_msg, 'employee_info': employee_info})
         else:
             pass
     else:
@@ -238,8 +239,9 @@ def person_bank_transaction_func(request, employee, transaction_type):
 
 def personal_bank_service(request):
     global person_bank_id
+    employee_info = models.EmployeeInfo.objects.all()
     if 'GET' == request.method:
-        return render(request, 'personal_bank_service.html')
+        return render(request, 'personal_bank_service.html', {'employee_info': employee_info})
     elif 'POST' == request.method:
         employee = models.EmployeeInfo.objects.filter(id=person_bank_id).first()
         transaction_type = request.POST.get('transaction', None)
