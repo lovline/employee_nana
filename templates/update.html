@@ -12,6 +12,8 @@
     <h4>email&nbsp;=&nbsp; {{ employee_info.email }}</h4>
     <h4>address&nbsp;=&nbsp; {{ employee_info.address }}</h4>
     <h4>department&nbsp;=&nbsp; {{ employee_info.department }}</h4>
+    <h4>level&nbsp;=&nbsp; {{ employee_info.level }}</h4>
+    <h4>deposit&nbsp;=&nbsp; {{ employee_info.deposit }}</h4>
     <form action="/employee/update_{{ employee_info.id }}/" method="post">
         <p>
             <label for="phone_number">number: </label>&nbsp;&nbsp;
@@ -33,6 +35,21 @@
                 <option value="Terminal">Terminal</option>
                 <option value="NotNNComany">NotNNComany</option>
             </select>
+        </p>
+        <p>
+            <label for="level">Level: </label>&nbsp;&nbsp;
+            <select name="department" >
+                <option value="13">Level 13</option>
+                <option value="14">Level 14</option>
+                <option value="15">Level 15</option>
+                <option value="16">Level 16</option>
+                <option value="17">Level 17</option>
+                <option value="18">Level 18</option>
+            </select>
+        </p>        
+        <p>
+            <label for="deposit">deposit: </label>&nbsp;&nbsp;
+            <input id="deposit" name="deposit" type="text" value="{{ employee_info.deposit }}" />
         </p>
         <p>
             <h3><span>confirm update:</span>&nbsp;&nbsp;
