@@ -102,6 +102,8 @@ def add_employee(request):
         address = request.POST.get('address', None)
         school = request.POST.get('school', None)
         department = request.POST.get('department', None)
+        lev = request.POST.get('level', None)
+        dep_money = request.POST.get('deposit', None)
         models.EmployeeInfo.objects.create(
             username=name,
             password=pwd,
@@ -113,6 +115,8 @@ def add_employee(request):
             address=address,
             school=school,
             department=department,
+            level=lev,
+            deposit=dep_money,
         )
         manager_msg = 'update %s succeed' % name
         employee_info = models.EmployeeInfo.objects.all()
@@ -138,11 +142,15 @@ def update_employee(request, uid):
         new_email = request.POST.get('email', None)
         new_address = request.POST.get('address', None)
         new_department = request.POST.get('department', None)
+        new_level = request.POST.get('level', None)
+        new_deposit = request.POST.get('deposit', None)
         models.EmployeeInfo.objects.filter(id=uid).update(
             phone_number=new_phone_number,
             email=new_email,
             address=new_address,
             department=new_department,
+            level=new_level,
+            deposit=new_deposit,
         )
         employee = models.EmployeeInfo.objects.filter(id=uid).first()
         manager_msg = 'update %s succeed' % employee.username
