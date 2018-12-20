@@ -22,8 +22,6 @@ urlpatterns = [
     url(r'^logout/', views.logout),
     url(r'^index', views.index),
     url(r'^manager_employee', views.manager_employee),
-    # url(r'^(\w+)_login/', views.employee_login),
-    # url(r'^(\w+)_logout/', views.employee_logout),
     url(r'^update_(\d+)/', views.update_employee),
     url(r'^delete_(\d+)/', views.delete_employee),
     url(r'^detail_(\d+)', views.one_detail_info),

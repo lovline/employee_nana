@@ -103,7 +103,15 @@ def add_employee(request):
         school = request.POST.get('school', None)
         department = request.POST.get('department', None)
         lev = request.POST.get('level', None)
+        if lev is None:
+            lev = 0
+        else:
+            lev = int(lev)
         dep_money = request.POST.get('deposit', None)
+        if dep_money is None:
+            dep_money = 0
+        else:
+            dep_money = int(dep_money)
         models.EmployeeInfo.objects.create(
             username=name,
             password=pwd,
@@ -194,10 +202,12 @@ def person_bank_transaction_func(request, employee, transaction_type):
                 taken_money = 0
             else:
                 taken_money = int(taken_money)
+                print taken_money
             if taken_money >= curr_deposit:
                 error_msg = 'sorry you dont have enough money to take'
             else:
                 up_deposit = curr_deposit - taken_money
+                print up_deposit
                 models.EmployeeInfo.objects.filter(id=person_bank_id).update(deposit=up_deposit)
                 error_msg = 'you have taken %d money from your bank account' % taken_money
             return render(request, 'personal_bank_service.html', {'error_msg': error_msg, 'employee_info': employee_info})
@@ -210,7 +220,7 @@ def person_bank_transaction_func(request, employee, transaction_type):
                 save_money = int(save_money)
             up_deposit = curr_deposit + save_money
             models.EmployeeInfo.objects.filter(id=person_bank_id).update(deposit=up_deposit)
-            error_msg = 'you have save %d money from your bank account' % save_money
+            error_msg = 'you have save %d money to your bank account' % save_money
             return render(request, 'personal_bank_service.html', {'error_msg': error_msg, 'employee_info': employee_info})
         elif 3 == transaction_type:
             # transfer money #
@@ -219,7 +229,7 @@ def person_bank_transaction_func(request, employee, transaction_type):
                 transfer_money = 0
             else:
                 transfer_money = int(transfer_money)
-            to_person_id = request.POST.get('to_person_id', None)
+            to_person_id = int(request.POST.get('to_person', None))
             to_person_obj = models.EmployeeInfo.objects.filter(id=to_person_id).first()
             if transfer_money >= curr_deposit:
                 error_msg = 'sorry you dont have enough money to take'
@@ -240,14 +250,16 @@ def person_bank_transaction_func(request, employee, transaction_type):
 def personal_bank_service(request):
     global person_bank_id
     employee_info = models.EmployeeInfo.objects.all()
+    employee = models.EmployeeInfo.objects.filter(id=person_bank_id).first()
+    if employee is None:
+        error_msg = 'please login first to your Bank'
+        return render(request, 'bank_service_login.html', {'error_msg': error_msg})
     if 'GET' == request.method:
-        return render(request, 'personal_bank_service.html', {'employee_info': employee_info})
+        return render(request, 'personal_bank_service.html', {'employee': employee, 'employee_info': employee_info})
     elif 'POST' == request.method:
-        employee = models.EmployeeInfo.objects.filter(id=person_bank_id).first()
-        transaction_type = request.POST.get('transaction', None)
-        if transaction_type is None:
-            transaction_type = 0
-        person_bank_transaction_func(request, employee, transaction_type)
+        transaction_type = request.POST.get('transaction_type', None)
+        result = person_bank_transaction_func(request, employee, int(transaction_type))
+        return result
     else:
         return redirect('/employee/personal_bank_service/')
 
@@ -263,7 +275,12 @@ def bank_service_login(request):
 
 
 def shop_store(request):
-    pass
+    if 'GET' == request.method:
+        return render(request, 'shop_store.html')
+    elif 'POST' == request.method:
+        pass
+    else:
+        return redirect('/employee/index/')
 
 
 def record_history(request):
