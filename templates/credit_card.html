@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Credit Card</title>
+    <link rel="stylesheet" href="/static/commons.css">
+    <style>
+        label{
+            width:80px;
+            text-align: right;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h2>welcome to use Credit Card Feature</h2>
+    {% for row in employee_info %}
+        <h4>your current Credit_Card ID number {{ row.credit_number }}</h4>
+        <h4>your current Credit_Limit is {{ row.credit_limit }}</h4>
+        <h4>&nbsp;&nbsp;&nbsp;&nbsp;your Available_Credit is {{ row.available_credit }}</h4>
+    {% endfor %}
+    <h5><span style="color: red">{{ error_msg }}</span></h5>
+    <form action="/employee/credit_card/" method="post">
+        <p>
+            <label for="increase_person" style="width: 150px">Increase_person Person: </label>&nbsp;&nbsp;
+            <select name="increase_person" style="width: 100px">
+                {% for row in employee_info %}
+                    <option value="{{ row.id }}">{{ row.username }}</option>
+                {% endfor %}
+            </select>
+            <label for="increase_limit" style="width: 150px">increase credit limit: </label>&nbsp;&nbsp;
+            <input id="increase_limit" name="increase_limit" type="text"  placeholder="1000"/>
+        </p>
+        <p>
+            ***************************************
+        </p>
+        <p>
+            <span>confirm increase:</span>&nbsp;&nbsp;
+            <input type="submit" value="increase">
+            <a target="_parent" href="/employee/index"><h4>Home Page</h4></a>
+        </p>
+    </form>
+</body>
+</html>
