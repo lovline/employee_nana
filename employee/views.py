@@ -133,14 +133,6 @@ def add_employee(request):
         return render(request, 'add_employee.html', {'employee_info': employee_info})
 
 
-def employee_login(request, uid):
-    pass
-
-
-def employee_logout(request, uid):
-    pass
-
-
 def update_employee(request, uid):
     employee_info = models.EmployeeInfo.objects.filter(id=uid).first()
     if 'GET' == request.method:
@@ -272,6 +264,27 @@ def bank_service_login(request):
         return result
     else:
         return redirect('/employee/bank_service_login/')
+
+
+def credit_card(request):
+    employee_info = models.EmployeeInfo.objects.all()
+    if 'GET' == request.method:
+        return render(request, 'credit_card.html')
+    elif 'POST' == request.method:
+        increase_person_id = request.POST.get('increase_person', None)
+        increase_limit = request.POST.get('increase_limit', None)
+        employee = models.EmployeeInfo.objects.filter(id=increase_person_id).first()
+        if employee:
+            up_limit = employee.credit_limit + increase_limit
+            models.EmployeeInfo.objects.filter(id=increase_person_id).update(credit_limit=up_limit)
+            error_msg = 'increase Credit Limit of %s is succeed ,current limt is %s' %(employee.username ,employee.credit_limit)
+            return render(request, 'credit_card.html', {'error_msg': error_msg,'employee_info': employee_info})
+        else:
+            return render(request, 'credit_card.html')
+    else:
+        return redirect('/employee/credit_card/')
+
+
 
 
 def shop_store(request):
