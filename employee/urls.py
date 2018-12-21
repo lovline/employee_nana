@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^note', views.note),
     url(r'^bank_service_login', views.bank_service_login),
     url(r'^personal_bank_service', views.personal_bank_service),
+    url(r'^credit_card', views.credit_card),
     url(r'^shop_store', views.shop_store),
     url(r'^record_history', views.record_history),
 ]
