@@ -180,7 +180,25 @@ def one_detail_info(request, uid):
 
 
 def note(request):
-    pass
+    note_contents = models.Notes.objects.all()
+    if 'POST' == request.method:  
+        name = request.POST.get('name', None)
+        place = request.POST.get('place', None)
+        content = request.POST.get('note', None)
+        # no. who wheen wheere contents #
+        if name is None:
+            name = 'lovline'
+        elif place is None:
+            place = 'HW'
+        elif content is None:
+            return render(request, 'index.html', {'note_contents': note_contents})
+        else:
+            models.Notes.objects.create(
+                who=name,
+                wheere=place,
+                contents=content,
+            )
+    return render(request, 'index.html', {'note_contents': note_contents})
 
 
 def person_bank_transaction_func(request, employee, transaction_type):
