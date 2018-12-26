@@ -13,9 +13,12 @@
     </style>
 </head>
 <body>
-    <h3> you have succeed login ! </h3>
+    <h3> you have succeed login ! &nbsp;&nbsp;&nbsp;&nbsp;<a target="_parent" href="/employee/logout">log out</a></h3>
     <h4> please select following features. </h4>
     <form action="/employee/index/" method="post">
+        <p>
+            --------------------------------------------------
+        </p>
         <p>
             <a target="_parent" href="/employee/manager_employee"><h5>&nbsp;&nbsp;No 1. Manager employee info</h5></a>
         </p>
@@ -29,14 +32,15 @@
             <a target="_parent" href="/employee/shop_store"><h5>&nbsp;&nbsp;No 4. Shop Store System</h5></a>
         </p>
         <p>
+            <a target="_parent" href="/employee/note"><h5>&nbsp;&nbsp;No 5. Record Note</h5></a>
+        </p>
+        <p>
             <a target="_parent" href="/employee/"><h5>&nbsp;&nbsp;No X. TO DO</h5></a>
         </p>
         <p>
             --------------------------------------------------
         </p>
-        <p>
-            <a target="_parent" href="/employee/logout"><h4>log out</h4></a>
-        </p>
+
     </form>
 </body>
 </html>

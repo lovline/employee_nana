@@ -12,23 +12,23 @@
         }
     </style>
 </head>
-<body>
     <h2>welcome to use Credit Card Feature</h2>
     {% for row in employee_info %}
-        <h4>your current Credit_Card ID number {{ row.credit_number }}</h4>
-        <h4>your current Credit_Limit is {{ row.credit_limit }}</h4>
-        <h4>&nbsp;&nbsp;&nbsp;&nbsp;your Available_Credit is {{ row.available_credit }}</h4>
+        <h5>{{ row.username }}'s Credit_Card number={{ row.credit_number }}</h5>
     {% endfor %}
-    <h5><span style="color: red">{{ error_msg }}</span></h5>
+    <h5><span style="color: green">{{ error_msg }}</span></h5>
+    <p>
+        ------------------------------------------------------
+    </p>
     <form action="/employee/credit_card/" method="post">
         <p>
-            <label for="increase_person" style="width: 150px">Increase_person Person: </label>&nbsp;&nbsp;
+            <label for="increase_person" style="width: 200px">Increase_person Person: </label>&nbsp;&nbsp;
             <select name="increase_person" style="width: 100px">
                 {% for row in employee_info %}
                     <option value="{{ row.id }}">{{ row.username }}</option>
                 {% endfor %}
             </select>
-            <label for="increase_limit" style="width: 150px">increase credit limit: </label>&nbsp;&nbsp;
+            <label for="increase_limit" style="width: 200px">increase credit limit: </label>&nbsp;&nbsp;
             <input id="increase_limit" name="increase_limit" type="text"  placeholder="1000"/>
         </p>
         <p>

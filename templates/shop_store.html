@@ -15,51 +15,7 @@
 <body>
     <h2>welcome to Online Shop Store</h2>
     <h5><span style="color: red">{{ error_msg }}</span></h5>
-    <form action="/employee/personal_bank_service/" method="post">
-        <p>
-            <label for="transaction_type" style="width: 150px">Transaction Type: </label>&nbsp;&nbsp;
-            <select name="transaction_type">
-                <option value="1">Taken Money</option>
-                <option value="2">Save Money</option>
-                <option value="3">Transfer Money</option>
-            </select>
-        </p>
-        <p>
-            ***************************************
-        </p>
-        <p>
-            <label for="taken" style="width: 150px">Taken Money: </label>&nbsp;&nbsp;
-            <input id="taken" name="taken" type="text"  placeholder="500"/>
-        </p>
-        <p>
-            ***************************************
-        </p>
-        <p>
-            ***************************************
-        </p>
-        <p>
-            <label for="save" style="width: 150px">Save Money: </label>&nbsp;&nbsp;
-            <input id="save" name="save" type="text"  placeholder="800"/>
-        </p>
-        <p>
-            ***************************************
-        </p>
-        <p>
-            ***************************************
-        </p>
-        <p>
-            <label for="to_person" style="width: 150px">Transfer Person: </label>&nbsp;&nbsp;
-            <select name="to_person" style="width: 100px">
-                {% for row in employee_info %}
-                    <option value="{{ row.id }}">{{ row.username }}</option>
-                {% endfor %}
-            </select>
-            <label for="transfer" style="width: 150px">Transfer Money: </label>&nbsp;&nbsp;
-            <input id="transfer" name="transfer" type="text"  placeholder="1000"/>
-        </p>
-        <p>
-            ***************************************
-        </p>
+    <form action="/employee/shop_store/" method="post">
         <p>
             <span>confirm operation:</span>&nbsp;&nbsp;
             <input type="submit" value="operation">

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Note</title>
+    <link rel="stylesheet" href="/static/commons.css">
+    <style>
+        label{
+            width:80px;
+            text-align: right;
+            display: inline-block;
+        }
+    </style>
+</head>
+    <h4>welcome to use Note&nbsp;&nbsp;&nbsp;&nbsp; <a target="_parent" href="/employee/index">Home Page</a></h4>
+    <h5><span style="color: green">{{ error_msg }}</span></h5>
+    <form action="/employee/note/" method="post">
+        <p>
+            <label for="name">who: </label>&nbsp;
+            <input id="name" name="name" type="text"  placeholder="lovline" value="lovline"/>
+            <label for="place">where: </label>&nbsp;
+            <input id="place" name="place" type="text"  placeholder="home" value="home"/>
+        </p>
+        <p>
+            &nbsp;&nbsp;<label for="note">contents: </label>&nbsp;
+            <textarea id="note" name="note" style="width: 500px;height: 80px" placeholder="coding all night"></textarea>
+        </p>
+        <p>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span>record:</span>&nbsp;&nbsp;
+            <input type="submit" value="record">
+        </p>
+        <p>
+            ***************************************
+        </p>
+        <p>
+            {% for note in note_contents %}
+                <li>
+                    No.{{ note.id }} {{ note.wheere }}: {{ note.who }}  write "{{ note.contents }}" at {{ note.wheen }}
+                &nbsp;&nbsp;&nbsp;<a target="_parent" href="/employee/delete_note_{{ note.id }}">delete</a>
+                </li>
+            {% endfor %}
+        </p>
+    </form>
+</body>
+</html>
