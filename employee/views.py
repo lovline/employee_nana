@@ -3,7 +3,7 @@ import schedule
 from employee import models
 
 # Create your views here.
-is_admin_login = False
+is_admin_login = True
 person_bank_id = 0
 salary_reflection = {
     13: 14000,
@@ -53,7 +53,7 @@ def login(request):
 
 def logout(request):
     global is_admin_login
-    is_admin_login = False
+    # is_admin_login = False
     error_msg = 'you have logout succeed'
     return render(request, 'login.html', {'error_msg': error_msg})
 
@@ -112,6 +112,9 @@ def add_employee(request):
             dep_money = 0
         else:
             dep_money = int(dep_money)
+        credit_no = request.POST.get('credit_number', None)
+        money_limit = request.POST.get('credit_limit', None)
+        available_money = request.POST.get('available_credit', None)
         models.EmployeeInfo.objects.create(
             username=name,
             password=pwd,
@@ -125,6 +128,9 @@ def add_employee(request):
             department=department,
             level=lev,
             deposit=dep_money,
+            credit_number=credit_no,
+            credit_limit=money_limit,
+            available_credit=available_money,
         )
         manager_msg = 'update %s succeed' % name
         employee_info = models.EmployeeInfo.objects.all()
@@ -181,24 +187,29 @@ def one_detail_info(request, uid):
 
 def note(request):
     note_contents = models.Notes.objects.all()
-    if 'POST' == request.method:  
+    if 'GET' == request.method:
+        return render(request, 'note.html', {'note_contents': note_contents})
+    if 'POST' == request.method:
         name = request.POST.get('name', None)
         place = request.POST.get('place', None)
         content = request.POST.get('note', None)
         # no. who wheen wheere contents #
-        if name is None:
+        if name == 'lovline':
             name = 'lovline'
-        elif place is None:
-            place = 'HW'
-        elif content is None:
-            return render(request, 'index.html', {'note_contents': note_contents})
-        else:
-            models.Notes.objects.create(
-                who=name,
-                wheere=place,
-                contents=content,
-            )
-    return render(request, 'index.html', {'note_contents': note_contents})
+        if place == 'home':
+            place = 'home'
+        models.Notes.objects.create(
+            who=name,
+            wheere=place,
+            contents=content,
+        )
+    return render(request, 'note.html', {'note_contents': note_contents})
+
+
+def delete_note(request, del_id):
+    models.Notes.objects.filter(id=del_id).delete()
+    note_contents = models.Notes.objects.all()
+    return render(request, 'note.html', {'note_contents': note_contents})
 
 
 def person_bank_transaction_func(request, employee, transaction_type):
@@ -287,29 +298,28 @@ def bank_service_login(request):
 def credit_card(request):
     employee_info = models.EmployeeInfo.objects.all()
     if 'GET' == request.method:
-        return render(request, 'credit_card.html')
+        return render(request, 'credit_card.html', {'employee_info': employee_info})
     elif 'POST' == request.method:
         increase_person_id = request.POST.get('increase_person', None)
         increase_limit = request.POST.get('increase_limit', None)
-        employee = models.EmployeeInfo.objects.filter(id=increase_person_id).first()
+        employee = models.EmployeeInfo.objects.filter(id=int(increase_person_id)).first()
         if employee:
-            up_limit = employee.credit_limit + increase_limit
-            models.EmployeeInfo.objects.filter(id=increase_person_id).update(credit_limit=up_limit)
-            error_msg = 'increase Credit Limit of %s is succeed ,current limt is %s' %(employee.username ,employee.credit_limit)
-            return render(request, 'credit_card.html', {'error_msg': error_msg,'employee_info': employee_info})
+            up_limit = employee.credit_limit + int(increase_limit)
+            models.EmployeeInfo.objects.filter(id=int(increase_person_id)).update(credit_limit=up_limit)
+            employee = models.EmployeeInfo.objects.filter(id=int(increase_person_id)).first()
+            error_msg = 'increase Credit Limit of %s is succeed ,current limt is %s' % (employee.username, employee.credit_limit)
+            return render(request, 'credit_card.html', {'error_msg': error_msg, 'employee_info': employee_info})
         else:
             return render(request, 'credit_card.html')
     else:
         return redirect('/employee/credit_card/')
 
 
-
-
 def shop_store(request):
     if 'GET' == request.method:
         return render(request, 'shop_store.html')
     elif 'POST' == request.method:
-        pass
+        return HttpResponse('hello to Shop Store')
     else:
         return redirect('/employee/index/')
 

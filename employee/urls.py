@@ -1,5 +1,4 @@
 """employee_nana URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.8/topics/http/urls/
 Examples:
@@ -24,6 +23,7 @@ urlpatterns = [
     url(r'^manager_employee', views.manager_employee),
     url(r'^update_(\d+)/', views.update_employee),
     url(r'^delete_(\d+)/', views.delete_employee),
+    url(r'^delete_note_(\d+)', views.delete_note),
     url(r'^detail_(\d+)', views.one_detail_info),
     url(r'^note', views.note),
     url(r'^bank_service_login', views.bank_service_login),

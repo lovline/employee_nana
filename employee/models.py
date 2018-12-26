@@ -24,3 +24,10 @@ class EmployeeInfo(models.Model):
     credit_limit = models.IntegerField()
     available_credit = models.IntegerField()
     employment_date = models.DateTimeField(max_length=64, auto_now_add=True)
+
+
+class Notes(models.Model):
+    who = models.CharField(max_length=16)
+    wheere = models.CharField(max_length=32)
+    contents = models.CharField(max_length=64)
+    wheen = models.DateTimeField(max_length=64, auto_now_add=True)
