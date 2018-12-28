@@ -319,7 +319,12 @@ def shop_store(request):
     if 'GET' == request.method:
         return render(request, 'shop_store.html')
     elif 'POST' == request.method:
-        return HttpResponse('hello to Shop Store')
+        book_list = []
+        for book in request.POST.getlist('books'):
+            book_list.append(book)
+        error_msg = 'shop store is developing.'
+        # TODO #
+        return render(request, 'credit_card.html', {'error_msg': error_msg, 'book_list': book_list})
     else:
         return redirect('/employee/index/')
 
