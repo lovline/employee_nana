@@ -64,7 +64,6 @@ open_execute_file_list = [
     work_national_path,
     work_patch_path,
     work_oversea_path,
-    pycharm_path,
 ]
 
 
@@ -73,6 +72,7 @@ def start_execute():
     for path in open_execute_file_list:
         os.startfile(path)
         time.sleep(0.7)
+    window.quit()
 
 
 window = tk.Tk()
