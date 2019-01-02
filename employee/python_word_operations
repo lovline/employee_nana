@@ -38,15 +38,22 @@ def create_VT_document(save_path):
     document.add_paragraph('VT 验证结果文件')
 
     document.add_heading('checklist项', level=2)
-    document.add_heading('热补丁资源检查：不涉及', level=3)
+    document.add_heading('问题单是否走到开发组长手里（归档）？', level=3)
+    document.add_paragraph('是')
+    document.add_heading('热补丁资源检查', level=3)
+    document.add_paragraph('（注：对于块内存可能由于SIP中继心跳，或者MSGI单板自检心跳影响导致波动，可以主要关注多次测试有无异常增加）')
     document.add_paragraph('补丁前后DSP SYSRES，可参考补丁信息文件')
-    document.add_heading('热补丁异常打印检测：不涉及', level=3)
+    document.add_paragraph('不涉及')
+    document.add_heading('热补丁异常打印检测', level=3)
     document.add_paragraph('A、DeviceAlarm中搜索“call by”')
     document.add_paragraph('B、DeviceAlarm中搜索“dead”')
     document.add_paragraph('C、DeviceOSlog中搜索“destroy”')
+    document.add_paragraph('不涉及')
     document.add_heading('涉及BAM后台的修改：不涉及', level=3)
     document.add_paragraph('重复打一次BAM补丁能否成功')
-    document.add_heading('检查结果是否和之前验证的结果一致？：一致', level=3)
+    document.add_paragraph('不涉及')
+    document.add_heading('检查结果是否和之前验证的结果一致？', level=3)
+    document.add_paragraph('一致')
 
 
     # 保存文件
