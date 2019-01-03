@@ -38,7 +38,10 @@ def create_VT_document(save_path):
     # 获取路径中对应的问题单号 #
     pattern = re.compile(r'DTS\d{10,15}')
     match = pattern.search(save_path)
-    dts_number = match.group()
+    if match:
+        dts_number = match.group()
+    else:
+        dts_number = 'DTSXXXXX'
     document.add_paragraph(dts_number)
 
     paragraph = document.add_paragraph()
@@ -67,6 +70,7 @@ def create_VT_document(save_path):
     run.bold = True
     document.add_paragraph('VT 验证结果文件TODO')
 
+    document.add_paragraph('')
     paragraph = document.add_paragraph()
     run = paragraph.add_run(u'checklist项')
     run.font.size = Pt(16)
