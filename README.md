@@ -3,7 +3,7 @@ user Django to achieve employee manager system.
 
 # author : 'lovline'
 
-# ninth
-# update time : 2018-12-27 00:49
+# tenth
+# update time : 2019-01-03 23:57
 # update place : Beautiful Views
 # device : HP laptop
