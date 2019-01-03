@@ -149,3 +149,31 @@ tk.Button(window, text="open common program", height='2', width='20', font=('bla
 window.mainloop()
 
 
+# temp #
+import zipfile, os, re
+
+dirPath = outFullName = r'D:\TestTestTest'
+vt_report_file_name, dsp_patch_file_name, test_file_name = '', '', ''
+
+# zip = zipfile.ZipFile(outFullName, 'w', zipfile.ZIP_DEFLATED)
+for path, dirnames, filenames in os.walk(dirPath):
+    # 去掉目标跟路径，只对目标文件夹下边的文件及文件夹进行压缩
+    # print(path, dirnames, filenames)
+    fpath = path.replace(dirPath,'')
+    # print(path, dirnames, filenames)
+
+    for dirname in dirnames:
+        if re.search(r'VT', dirname):
+            vt_report_file_name = dirname
+
+    for filename in filenames:
+        if re.search(r'PATCH', filename):
+            dsp_patch_file_name = filename.replace('【', '').replace('】', '').split('.')[0]
+        elif re.search(r'用例', filename):
+            test_file_name = filename.split('.')[0]
+        else:
+            pass
+        # print(os.path.join(path, filename),',', os.path.join(fpath, filename))
+        # zip.write(os.path.join(path, filename), os.path.join(fpath, filename))
+# zip.close()
+print(vt_report_file_name, dsp_patch_file_name, test_file_name)
