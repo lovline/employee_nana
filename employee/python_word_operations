@@ -3,7 +3,7 @@ from  docx.shared import  Pt
 from  docx.oxml.ns import  qn
 from docx.shared import Inches
 import tkinter as tk
-import os, time
+import re
 
 
 def create_VT_document(save_path):
@@ -11,9 +11,18 @@ def create_VT_document(save_path):
     document = Document()
     document.styles['Normal'].font.name = u'宋体'
     document.styles['Normal']._element.rPr.rFonts.set(qn('w:eastAsia'), u'宋体')
-    # 加入不同等级的标题
-    document.add_heading('问题单VT 报告', 0)
-    document.add_paragraph('注意如下几项：')
+    # 加入一级标题
+    paragraph = document.add_paragraph()
+    # 设置字号
+    run = paragraph.add_run(u'问题单VT 报告')
+    run.font.size = Pt(24)
+    run.bold  = True
+
+    paragraph = document.add_paragraph()
+    # 设置字号
+    run = paragraph.add_run(u'注意如下几项：')
+    run.font.size = Pt(15)
+    run.bold = True
     # 增加有序列表
     document.add_paragraph(u'请使用干净的环境进行VT，防止后台有垃圾数据影响VT结果。', style='List Number')
     document.add_paragraph(u'CPCI版本重新安装BAM，打补丁进行VT，这样最保险。', style='List Number')
@@ -21,7 +30,21 @@ def create_VT_document(save_path):
     document.add_paragraph(u'VT前将数据库还原成之前备份一个比较干净的数据库，再打最新的补丁。', style='List Number')
     # 增加分页
     # document.add_page_break()
-    document.add_heading('补丁信息', level=2)
+
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(u'问题单编号')
+    run.font.size = Pt(15)
+    run.bold = True
+    # 获取路径中对应的问题单号 #
+    pattern = re.compile(r'DTS\d{10,15}')
+    match = pattern.search(save_path)
+    dts_number = match.group()
+    document.add_paragraph(dts_number)
+
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(u'补丁信息')
+    run.font.size = Pt(15)
+    run.bold = True
     # 增加无序列表
     document.add_paragraph(u'LST PATCHVER:;', style='List Bullet')
     document.add_paragraph(u'DSP PATCHVER:;', style='List Bullet')
@@ -29,36 +52,59 @@ def create_VT_document(save_path):
     document.add_paragraph(u'DSP INVER:;', style='List Bullet')
     document.add_paragraph(u'DSP BAMPATCH:;', style='List Bullet')
     document.add_paragraph(u'DSP SYSRES:;', style='List Bullet')
-    document.add_paragraph('补丁信息文件')
+    document.add_paragraph('补丁信息文件TODO')
 
-    document.add_heading('测试用例', level=2)
-    document.add_paragraph('测试用例文件')
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(u'测试用例')
+    run.font.size = Pt(15)
+    run.bold = True
+    document.add_paragraph('是否完成，是否符合规范: 是，是。')
+    document.add_paragraph('测试用例文件TODO')
 
-    document.add_heading('VT 验证结果', level=2)
-    document.add_paragraph('VT 验证结果文件')
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(u'VT 验证结果')
+    run.font.size = Pt(15)
+    run.bold = True
+    document.add_paragraph('VT 验证结果文件TODO')
 
-    document.add_heading('checklist项', level=2)
-    document.add_heading('问题单是否走到开发组长手里（归档）？', level=3)
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(u'checklist项')
+    run.font.size = Pt(16)
+    run.bold = True
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(u'问题单是否走到开发组长手里（归档）？')
+    run.font.size = Pt(15)
+    run.bold = True
     document.add_paragraph('是')
-    document.add_heading('热补丁资源检查', level=3)
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(u'热补丁资源检查')
+    run.font.size = Pt(15)
+    run.bold = True
     document.add_paragraph('（注：对于块内存可能由于SIP中继心跳，或者MSGI单板自检心跳影响导致波动，可以主要关注多次测试有无异常增加）')
     document.add_paragraph('补丁前后DSP SYSRES，可参考补丁信息文件')
     document.add_paragraph('不涉及')
-    document.add_heading('热补丁异常打印检测', level=3)
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(u'热补丁异常打印检测')
+    run.font.size = Pt(15)
+    run.bold = True
     document.add_paragraph('A、DeviceAlarm中搜索“call by”')
     document.add_paragraph('B、DeviceAlarm中搜索“dead”')
     document.add_paragraph('C、DeviceOSlog中搜索“destroy”')
     document.add_paragraph('不涉及')
-    document.add_heading('涉及BAM后台的修改：不涉及', level=3)
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(u'涉及BAM后台的修改')
+    run.font.size = Pt(15)
+    run.bold = True
     document.add_paragraph('重复打一次BAM补丁能否成功')
     document.add_paragraph('不涉及')
-    document.add_heading('检查结果是否和之前验证的结果一致？', level=3)
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(u'检查结果是否和之前验证的结果一致?')
+    run.font.size = Pt(15)
+    run.bold = True
     document.add_paragraph('一致')
 
-
-    # 保存文件
-    dts_number = 'DTS123123123'
-    save_file_name = save_path + '\\' + dts_number + 'VT 报告' + '.docx'
+    # 保存文件 #
+    save_file_name = save_path + '\\' + dts_number + ' VT报告' + '.docx'
     document.save(save_file_name)
 
 
