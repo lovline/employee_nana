@@ -3,8 +3,38 @@ from  docx.shared import  Pt
 from  docx.oxml.ns import  qn
 from docx.shared import Inches
 import tkinter as tk
-import re
+import re, zipfile, os
 
+def zip_txt_excel_files(current_path, src_file_name, zip_dest_name):
+    zip = zipfile.ZipFile(zip_dest_name, 'w', zipfile.ZIP_DEFLATED)
+    sourceFileFullDir = os.path.join(current_path, src_file_name)
+    zip.write(sourceFileFullDir, src_file_name)
+    zip.close()
+
+def zip_vt_result_files(vt_directory, zip_dest_name):
+    sourceFiles = os.listdir(vt_directory)
+    # zipFileFullDir = os.path.join(zipFilePath, fileName)
+    zip = zipfile.ZipFile(zip_dest_name, 'w', zipfile.ZIP_DEFLATED)
+    for sourceFile in sourceFiles:
+        sourceFileFullDir = os.path.join(vt_directory, sourceFile)
+        zip.write(sourceFileFullDir, sourceFile)
+    zip.close()
+
+def create_zip_files(dirPath):
+    for path, dir_names, file_names in os.walk(dirPath):
+        # 打包VT结果文件夹 #
+        for dir_name in dir_names:
+            if re.search(r'VT', dir_name):
+                curr_directory = dirPath + '\\' + dir_name
+                zip_dest_name = dirPath + '\\' + dir_name + '.zip'
+                zip_vt_result_files(curr_directory, zip_dest_name)
+
+        # 打包DSP_PATCH.txt和测试用例.xlsx EXCEL文件 #
+        for filename in file_names:
+            if re.search(r'PATCH', filename) or re.search(r'用例', filename):
+                src_file_name = filename.split('.')[0]
+                zip_dest_name = dirPath + '\\' + src_file_name + '.zip'
+                zip_txt_excel_files(dirPath, filename, zip_dest_name)
 
 def create_VT_document(save_path):
     # 打开文档
@@ -55,20 +85,27 @@ def create_VT_document(save_path):
     document.add_paragraph(u'DSP INVER:;', style='List Bullet')
     document.add_paragraph(u'DSP BAMPATCH:;', style='List Bullet')
     document.add_paragraph(u'DSP SYSRES:;', style='List Bullet')
-    document.add_paragraph('补丁信息文件TODO')
+    document.add_paragraph('如下附件：')
+    document.add_paragraph('')
+    document.add_paragraph('')
 
     paragraph = document.add_paragraph()
     run = paragraph.add_run(u'测试用例')
     run.font.size = Pt(15)
     run.bold = True
     document.add_paragraph('是否完成，是否符合规范: 是，是。')
-    document.add_paragraph('测试用例文件TODO')
+    document.add_paragraph('如下附件：')
+    document.add_paragraph('')
+    document.add_paragraph('')
+    document.add_paragraph('')
 
     paragraph = document.add_paragraph()
     run = paragraph.add_run(u'VT 验证结果')
     run.font.size = Pt(15)
     run.bold = True
-    document.add_paragraph('VT 验证结果文件TODO')
+    document.add_paragraph('如下附件：')
+    document.add_paragraph('')
+    document.add_paragraph('')
 
     document.add_paragraph('')
     paragraph = document.add_paragraph()
@@ -117,6 +154,7 @@ def get_save_path():
 
 def start_execute():
     save_path = get_save_path()
+    create_zip_files(save_path)
     create_VT_document(save_path)
     window.quit()
 
@@ -149,31 +187,3 @@ tk.Button(window, text="open common program", height='2', width='20', font=('bla
 window.mainloop()
 
 
-# temp #
-import zipfile, os, re
-
-dirPath = outFullName = r'D:\TestTestTest'
-vt_report_file_name, dsp_patch_file_name, test_file_name = '', '', ''
-
-# zip = zipfile.ZipFile(outFullName, 'w', zipfile.ZIP_DEFLATED)
-for path, dirnames, filenames in os.walk(dirPath):
-    # 去掉目标跟路径，只对目标文件夹下边的文件及文件夹进行压缩
-    # print(path, dirnames, filenames)
-    fpath = path.replace(dirPath,'')
-    # print(path, dirnames, filenames)
-
-    for dirname in dirnames:
-        if re.search(r'VT', dirname):
-            vt_report_file_name = dirname
-
-    for filename in filenames:
-        if re.search(r'PATCH', filename):
-            dsp_patch_file_name = filename.replace('【', '').replace('】', '').split('.')[0]
-        elif re.search(r'用例', filename):
-            test_file_name = filename.split('.')[0]
-        else:
-            pass
-        # print(os.path.join(path, filename),',', os.path.join(fpath, filename))
-        # zip.write(os.path.join(path, filename), os.path.join(fpath, filename))
-# zip.close()
-print(vt_report_file_name, dsp_patch_file_name, test_file_name)
