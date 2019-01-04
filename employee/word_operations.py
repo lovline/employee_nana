@@ -5,6 +5,11 @@ from docx.shared import Inches
 import tkinter as tk
 import re, zipfile, os
 
+"""
+使用pyinstall生成exe之后会有个问题：docx.opc.exceptions.PackageNotFoundError: Package not found at '\docx\templates\default.docx'
+可参考如下链接解决： https://www.cnblogs.com/jiayongji/p/7290410.html
+"""
+
 def zip_txt_excel_files(current_path, src_file_name, zip_dest_name):
     zip = zipfile.ZipFile(zip_dest_name, 'w', zipfile.ZIP_DEFLATED)
     sourceFileFullDir = os.path.join(current_path, src_file_name)
@@ -38,7 +43,7 @@ def create_zip_files(dirPath):
 
 def create_VT_document(save_path):
     # 打开文档
-    document = Document()
+    document = Document(docx=os.path.join(os.getcwd(), 'default.docx'))
     document.styles['Normal'].font.name = u'宋体'
     document.styles['Normal']._element.rPr.rFonts.set(qn('w:eastAsia'), u'宋体')
     # 加入一级标题
